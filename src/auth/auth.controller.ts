@@ -24,4 +24,31 @@ export class AuthController {
       throw new HttpException('Invalid token', HttpStatus.UNAUTHORIZED);
     }
   }
+
+  @Post('register')
+  async register(
+    @Body()
+    body: {
+      uid: string;
+      email: string;
+      username: string;
+      phone: string;
+      age: number;
+      address: string;
+      createdAt: string;
+    },
+  ) {
+    try {
+      const userData = {
+        ...body,
+        createdAt: new Date(body.createdAt),
+      };
+      return await this.authService.registerUser(userData);
+    } catch (error) {
+      throw new HttpException(
+        'Lỗi lưu vào MySQL',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
 }
